@@ -15,7 +15,7 @@ var Type = module.exports = function Type () {}
  */
 Type.extend = function extend (map) {
   // Construct.
-  var type = map.init || function init () {
+  var type = map.init || function SubType () {
     type._super.apply(this, arguments)
   }
 
@@ -23,35 +23,17 @@ Type.extend = function extend (map) {
   this.decorate(type, this, true)
   this.decorate(type.prototype, this.prototype, true)
 
-  // Extend with map.
-  this.decorate(type.prototype, map, true)
-  delete type.prototype.init
-
-  // Reference supers.
-  type.prototype._super = this.prototype
-  type._super = this
-
-  return type
-}
-
-/**
- * Decorate an object with a map of properties.
- *
- * @param  {Object}  object     An object to decorate.
- * @param  {Object}  map        An optional map to decorate the object with.
- * @param  {Boolean} overwrite  Whether to overwrite existing properties.
- */
-Type.decorate = function decorate (object, map, overwrite) {
-  // If a map isn't provided, use prototypes.
-  if (!map) {
-    object = object.prototype
-    map = this.prototype
-  }
+  // Extend, with the map.
   for (var key in map) {
-    if (overwrite || (object[key] === undefined)) {
-      object[key] = map[key]
+    if (key !== 'init') {
+      type.prototype[key] = map[key]
     }
   }
+
+  // Link the super.
+  this.hide(type, '_super', this)
+
+  return type
 }
 
 /**
@@ -59,7 +41,8 @@ Type.decorate = function decorate (object, map, overwrite) {
  *
  * @param  {Object}         object     An object to decorate.
  * @param  {Boolean}        overwrite  Whether to overwrite existing properties.
- * @param  {Array|Boolean}  args       Optional arguments for the constructor, or false to skip the constructor.
+ * @param  {Array|Boolean}  args       Optional arguments for the constructor,
+ *                                     or false to skip the constructor.
  */
 Type.init = function init (object, overwrite, args) {
   // Allow calling with (object, args).
@@ -70,6 +53,37 @@ Type.init = function init (object, overwrite, args) {
   this.decorate(object, this.prototype, overwrite)
   if (args !== false) {
     this.apply(object, args)
+  }
+}
+
+/**
+ * Decorate an object with a map of properties.
+ *
+ * @param  {Object}  object     An object to decorate.
+ * @param  {Object}  map        An optional map to decorate the object with.
+ * @param  {Boolean} overwrite  Whether to overwrite existing properties.
+ */
+Type.decorate = function decorate (object, map, overwrite) {
+  for (var key in map) {
+    if (overwrite || (object[key] === undefined)) {
+      object[key] = map[key]
+    }
+  }
+}
+
+/**
+ * Include another type's prototype methods in this one's.
+ *
+ * @param  {Object}  type       Another type to mix in.
+ * @param  {Boolean} overwrite  Whether to overwrite existing properties.
+ */
+Type.include = function decorate (type, overwrite) {
+  this.decorate(this.prototype, type.prototype, overwrite)
+  var includes = this._includes
+  if (includes) {
+    includes[includes.length] = type
+  } else {
+    Type.hide(this, '_includes', [type])
   }
 }
 
@@ -86,4 +100,52 @@ Type.hide = function hide (object, key, value) {
     writable: true,
     value: value
   })
+}
+
+/**
+ * Checks whether this Type is an extension of another Type.
+ *
+ * @param  {Type}    type  A possible ancestor.
+ * @return {Boolean}       True if this type is an extension of the given type.
+ */
+Type.is = function is (type) {
+  var sup = this
+  while (sup) {
+    if (sup === type) {
+      return true
+    }
+    sup = sup._super
+  }
+  return false
+}
+
+/**
+ * Checks whether this Type has acquired the functionality of another type
+ * via the extend method or the include method.
+ *
+ * @param  {Type}    type  A type whose functionality might be mixed in.
+ * @return {Boolean}       True the given type is extended from or mixed in.
+ */
+Type.has = function has (type) {
+  if (this === type) {
+    return true
+  }
+  var sup = this._super
+  if (sup) {
+    if (sup === type) {
+      return true
+    }
+    if (sup.has(type)) {
+      return true
+    }
+  }
+  var includes = this._includes
+  if (includes) {
+    for (var i = 0, l = includes.length; i < l; i++) {
+      if (includes[i].has(type)) {
+        return true
+      }
+    }
+  }
+  return false
 }

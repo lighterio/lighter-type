@@ -1,5 +1,6 @@
 'use strict'
 /* global describe it */
+
 var Type = require('../lighter-type')
 var is = global.is || require('exam/lib/is')
 
@@ -46,23 +47,6 @@ describe('Type', function () {
       var o = {}
       Type.decorate(o, {a: 1})
       is(o.a, 1)
-    })
-
-    it('uses a prototype if no decorations are provided', function () {
-      var Boxer = Type.extend({
-        punch: function () {
-          return 'right jab'
-        }
-      })
-      var Kangaroo = Type.extend({
-        getCountry: function () {
-          return 'AU'
-        }
-      })
-      Boxer.decorate(Kangaroo)
-      var joey = new Kangaroo()
-      var punch = joey.punch()
-      is(punch, 'right jab')
     })
 
     it('doesn\'t overwrite properties unless told', function () {
@@ -165,6 +149,143 @@ describe('Type', function () {
       Adder.init(calculator, false, false)
       is.function(calculator.add)
       is.undefined(calculator.name)
+    })
+  })
+
+  describe('.include', function () {
+    it('mixes functionality into a type', function () {
+      var Boxer = Type.extend({
+        punch: function () {
+          return 'right jab'
+        }
+      })
+      var Kangaroo = Type.extend({
+        getCountry: function () {
+          return 'AU'
+        }
+      })
+      Kangaroo.include(Boxer)
+      var joey = new Kangaroo()
+      var punch = joey.punch()
+      is(punch, 'right jab')
+    })
+
+    it('supports multiple inheritance', function () {
+      var Vehicle = Type.extend({
+        init: function Vehicle () {},
+        worksOnLand: function () {
+          return !!this.isLandVehicle
+        },
+        worksOnWater: function () {
+          return !!this.isWaterVehicle
+        }
+      })
+      var Car = Vehicle.extend({
+        init: function Car () {},
+        isLandVehicle: true
+      })
+      var Boat = Vehicle.extend({
+        init: function Boat () {},
+        isWaterVehicle: true
+      })
+      var Hovercraft = Vehicle.extend({})
+      Hovercraft.include(Car)
+      Hovercraft.include(Boat)
+      var hovercraft = new Hovercraft()
+      is(hovercraft.worksOnLand(), true)
+      is(hovercraft.worksOnWater(), true)
+      is(Hovercraft.has(Car), true)
+      is(Hovercraft.has(Boat), true)
+    })
+  })
+
+  describe('.is', function () {
+    it('returns true for itself', function () {
+      var Blah = Type.extend({})
+      is.true(Blah.is(Blah))
+    })
+
+    it('returns false for an unrelated Type', function () {
+      var Beep = Type.extend({})
+      var Boop = Type.extend({})
+      is.false(Beep.is(Boop))
+    })
+
+    it('returns false for unrelated stuff', function () {
+      var Beep = Type.extend({})
+      is.false(Beep.is())
+      is.false(Beep.is(undefined))
+      is.false(Beep.is(null))
+      is.false(Beep.is(true))
+      is.false(Beep.is(1))
+      is.false(Beep.is('a'))
+      is.false(Beep.is(is))
+      is.false(Beep.is({}))
+      is.false(Beep.is([]))
+    })
+
+    it('returns true for ancestors', function () {
+      var Foo = Type.extend({})
+      var Bar = Foo.extend({})
+      var Baz = Bar.extend({})
+      is.true(Baz.is(Bar))
+      is.true(Baz.is(Foo))
+      is.true(Baz.is(Type))
+    })
+
+    it('returns false for descendents', function () {
+      var Foo = Type.extend({})
+      var Bar = Foo.extend({})
+      var Baz = Bar.extend({})
+      is.false(Bar.is(Baz))
+      is.false(Foo.is(Baz))
+      is.false(Type.is(Baz))
+    })
+  })
+
+  describe('.has', function () {
+    it('returns true for itself', function () {
+      var Blah = Type.extend({})
+      is.true(Blah.has(Blah))
+    })
+
+    it('returns false for an unrelated Type', function () {
+      var Beep = Type.extend({})
+      var Boop = Type.extend({})
+      is.false(Beep.has(Boop))
+    })
+
+    it('returns false for unrelated stuff', function () {
+      var Beep = Type.extend({})
+      is.false(Beep.has())
+      is.false(Beep.has(undefined))
+      is.false(Beep.has(null))
+      is.false(Beep.has(true))
+      is.false(Beep.has(1))
+      is.false(Beep.has('a'))
+      is.false(Beep.has(is))
+      is.false(Beep.has({}))
+      is.false(Beep.has([]))
+    })
+
+    it('returns true for ancestors', function () {
+      var Foo = Type.extend({})
+      var Bar = Foo.extend({})
+      var Baz = Bar.extend({})
+      is.true(Baz.has(Bar))
+      is.true(Baz.has(Foo))
+      is.true(Baz.has(Type))
+    })
+
+    it('returns true when ancestors include stuff', function () {
+      var Grandparent = Type.extend({})
+      var Kindness = Type.extend({})
+      var Parent = Grandparent.extend({})
+      var Child = Parent.extend({})
+      Grandparent.include(Kindness)
+      is.true(Child.has(Kindness))
+      is.true(Parent.has(Kindness))
+      is.true(Grandparent.has(Kindness))
     })
   })
 })

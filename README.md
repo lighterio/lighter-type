@@ -170,8 +170,9 @@ console.log(a.sum())
 //> 6
 ```
 
-The `decorate` method can be used for multiple inheritance purposes, by
-using multiple Type prototypes to decorate another object prototype.
+### Type.include(type[, overwrite])
+
+The `include` method implements multiple inheritance by decorating one Type's prototype with the prototype properties of another.
 
 ```js
 var Type = require('lighter-type')
@@ -201,12 +202,12 @@ var Boat = Vehicle.extend({
   isWaterVehicle: true
 })
 
-// A hovercraft is a vehicle, plain and simple.
+// A hovercraft is also a vehicle.
 var Hovercraft = Vehicle.extend({})
 
-// Make it work like a car or a boat.
-Car.decorate(Hovercraft)
-Boat.decorate(Hovercraft)
+// A hovercraft includes the functionality of a Car and a Boat.
+Hovercraft.include(Car)
+Hovercraft.include(Boat)
 
 // Create a new Hovercraft.
 var hovercraft = new Hovercraft()
@@ -216,6 +217,51 @@ console.log(hovercraft.worksOnLand())
 
 console.log(hovercraft.worksOnWater())
 //> true
+```
+
+### Type.is(type)
+Checks whether this Type is descended from another Type.
+
+```js
+var Foo = Type.extend({})
+var Bar = Foo.extend({})
+var Baz = Bar.extend({})
+
+console.log(Baz.is(Foo))
+//> true
+
+console.log(Foo.is(Baz))
+//> false
+```
+
+### Type.has(type)
+Checks whether this Type has acquired the functionality of another type
+via the extend method or the include method.
+
+```js
+var Type = require('lighter-type')
+
+// Create an object with a visible (i.e. enumerable) method.
+var object = {
+  visible: function () {
+    console.log('I am visible.')
+  }
+}
+
+// Add a non-enumerable property called "hidden".
+Type.hide(object, 'hidden', function () {
+  console.log('I am hidden.')
+})
+
+// Verify that the "hidden" method exists.
+object.hidden()
+//> "I exist."
+
+// Verify that only the "visible" method is enumerable.
+for (var key in object) {
+  console.log(key)
+}
+//> "visible"
 ```
 
 ### Type.hide(object, key, value)
