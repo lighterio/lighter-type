@@ -28,21 +28,21 @@ npm install --save lighter-type
 
 The `lighter-type` module outputs a constructor with several methods.
 
-### Type.extend(map)
+### Type.extend(pros, typs)
 
 Define and return a sub type of the `Type` object, with a prototype decorated
-with a `map` of additional properties. Additionally, the sub type itself gets
-the same properties as its super type (such as the `extend` method).
+with optional `pros` (a map of additional prototype properties) and optional
+`typs` (a map additional type properties. The sub type itself also inherits
+the properties of its super type (such as the `extend` method).
 
-When the `map` includes a property called `init`, it is used as the constructor
-for the sub type rather than being added as a prototype property.
+When the `pros` argument includes a property called `init`, it is used as the
+constructor for the sub type rather than being added as a prototype property.
 
 ```js
 var Type = require('lighter-type')
 
 // Make a Person type.
 var Person = Type.extend({
-
   // Construct a new person with a name.
   init: function (name) {
     this.name = name
@@ -55,15 +55,22 @@ var Person = Type.extend({
   greet: function () {
     console.log(this.salutation + ', ' + this.name + '!')
   }
-
+}, {
+  // Identify this type, if asked.
+  getTypeName: function () {
+    return 'Person'
+  }
 })
 
 // Make a Friend sub type by extending the Person type.
 var Friend = Person.extend({
-
   // Be a bit more informal with friends.
   salutation: 'Hi'
-
+}, {
+  // Identify this type, if asked.
+  getTypeName: function () {
+    return 'Friend'
+  }
 })
 
 // Instantiate Bob, and greet him.
@@ -75,6 +82,10 @@ bob.greet()
 var joe = new Friend('Joe')
 joe.greet()
 //> "Hi, Joe!"
+
+// Make sure a Friend is a Friend.
+console.log(Friend.getTypeName())
+//> "Friend"
 ```
 
 Each type's prototype has `_super` property which references its parent

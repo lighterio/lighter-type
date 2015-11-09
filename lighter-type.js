@@ -10,27 +10,34 @@ var Type = module.exports = function Type () {}
 /**
  * Extend a Type, yielding a new Type with additional properties from a map.
  *
- * @param  {Object} map  A map of additional properties.
+ * @param  {Object} pros  An optional map of additional prototype properties.
+ * @param  {Object} typs  An optional map of additional type properties.
  * @return {Object}      The new Type.
  */
-Type.extend = function extend (map) {
+Type.extend = function extend (pros, typs) {
   // Construct.
-  var type = map.init || function SubType () {
+  var type = (pros || 0).init || function SubType () {
     type._super.apply(this, arguments)
   }
+  var pro = type.prototype
 
-  // Copy type and prototype properties.
+  // Copy.
   this.decorate(type, this, true)
-  this.decorate(type.prototype, this.prototype, true)
+  this.decorate(pro, this.prototype, true)
 
-  // Extend, with the map.
-  for (var key in map) {
-    if (key !== 'init') {
-      type.prototype[key] = map[key]
+  // Extend.
+  if (pros) {
+    for (var key in pros) {
+      if (key !== 'init') {
+        pro[key] = pros[key]
+      }
     }
   }
+  if (typs) {
+    this.decorate(type, typs, true)
+  }
 
-  // Link the super.
+  // Link.
   this.hide(type, '_super', this)
 
   return type
@@ -77,7 +84,7 @@ Type.decorate = function decorate (object, map, overwrite) {
  * @param  {Object}  type       Another type to mix in.
  * @param  {Boolean} overwrite  Whether to overwrite existing properties.
  */
-Type.include = function decorate (type, overwrite) {
+Type.include = function include (type, overwrite) {
   this.decorate(this.prototype, type.prototype, overwrite)
   var includes = this._includes
   if (includes) {
