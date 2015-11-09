@@ -1,5 +1,8 @@
 # lighter-type Change Log
 
+## v2.1.0 - 2015-11-09
+* `minor` Added an optional parameter to `extend` for type properties.
+
 ## v2.0.0 - 2015-11-04
 * `major` Made map parameter non-optional in `decorate` method.
 * `minor` Added `includes` method for multiple inheritance.
