@@ -33,6 +33,7 @@ The `lighter-type` module outputs a constructor with several methods.
 - [Type.has(type)](#typehastype)
 - [Type.hide(object, key, value)](#typehideobject-key-value)
 
+<a name="Type.extend"></a>
 ### Type.extend(prototypeProps[, constructorProps])
 Define and return a sub type of the `Type` object, with a prototype decorated
 with optional `prototypeProps` (a map of additional prototype properties) and optional
@@ -121,6 +122,7 @@ console.log(beam.isBent)
 //> true
 ```
 
+<a name="Type.init"></a>
 ### Type.init(object[, overwrite][, args])
 Decorate an object with the prototype of a `Type`, and call its constructor
 on the object with an `args` array, unless `args` is `false`, in which case
@@ -145,6 +147,7 @@ console.emit('hi', 'Sam')
 //> Hi, Sam!
 ```
 
+<a name="Type.decorate"></a>
 ### Type.decorate(object[, map][, overwrite])
 Decorate an `object` with a `map` of additional properties (or overriding
 properties if `overwrite` is truthy). If the map is not specified, the `Type`
@@ -183,6 +186,7 @@ console.log(a.sum())
 //> 6
 ```
 
+<a name="Type.include"></a>
 ### Type.include(type[, overwrite])
 Implement multiple inheritance by decorating one Type's prototype with the
 prototype properties of another.
@@ -232,6 +236,7 @@ console.log(hovercraft.worksOnWater())
 //> true
 ```
 
+<a name="Type.is"></a>
 ### Type.is(type)
 Check whether this Type is descended from another Type.
 
@@ -247,6 +252,7 @@ console.log(Foo.is(Baz))
 //> false
 ```
 
+<a name="Type.has"></a>
 ### Type.has(type)
 Check whether this Type has acquired the functionality of another type
 via the extend method or the include method.
@@ -277,6 +283,7 @@ for (var key in object) {
 //> "visible"
 ```
 
+<a name="Type.hide"></a>
 ### Type.hide(object, key, value)
 Create a property of `object` named `key` with value `value`, and "hide" it by
 making it non-enumerable.
