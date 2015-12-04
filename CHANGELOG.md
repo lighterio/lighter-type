@@ -1,5 +1,8 @@
 # lighter-type Change Log
 
+## v2.1.1 - 2015-12-03
+* `patch` Table of contents in README.
+
 ## v2.1.0 - 2015-11-09
 * `minor` Added an optional parameter to `extend` for type properties.
 
