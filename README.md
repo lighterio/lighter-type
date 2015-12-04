@@ -28,14 +28,14 @@ npm install --save lighter-type
 
 The `lighter-type` module outputs a constructor with several methods.
 
-### Type.extend(pros, typs)
+### Type.extend(prototypeProps, constructorProps)
 
 Define and return a sub type of the `Type` object, with a prototype decorated
-with optional `pros` (a map of additional prototype properties) and optional
-`typs` (a map additional type properties. The sub type itself also inherits
+with optional `prototypeProps` (a map of additional prototype properties) and optional
+`constructorProps` (a map additional type properties. The sub type itself also inherits
 the properties of its super type (such as the `extend` method).
 
-When the `pros` argument includes a property called `init`, it is used as the
+When the `prototypeProps` argument includes a property called `init`, it is used as the
 constructor for the sub type rather than being added as a prototype property.
 
 ```js
