@@ -22,10 +22,18 @@ From your project directory, install and save as a dependency:
 npm install --save lighter-type
 ```
 
-## API
+## Usage
 The `lighter-type` module outputs a constructor with several methods.
 
-### Type.extend(prototypeProps, constructorProps)
+- [Type.extend(prototypeProps[, constructorProps])](#typeextendprototypeprops-constructorprops)
+- [Type.init(object[, overwrite][, args])](#typeinitobject-overwrite-args)
+- [Type.decorate(object[, map][, overwrite])](#typedecorateobject-map-overwrite)
+- [Type.include(type[, overwrite])](#typeincludetype-overwrite)
+- [Type.is(type)](#typeistype)
+- [Type.has(type)](#typehastype)
+- [Type.hide(object, key, value)](#typehideobject-key-value)
+
+### Type.extend(prototypeProps[, constructorProps])
 Define and return a sub type of the `Type` object, with a prototype decorated
 with optional `prototypeProps` (a map of additional prototype properties) and optional
 `constructorProps` (a map additional type properties. The sub type itself also inherits
