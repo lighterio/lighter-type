@@ -16,20 +16,16 @@ It supports:
 * Multiple inheritance
 * Non-enumerable property definitions
 
-
 ## Installation
-
 From your project directory, install and save as a dependency:
 ```bash
 npm install --save lighter-type
 ```
 
 ## API
-
 The `lighter-type` module outputs a constructor with several methods.
 
 ### Type.extend(prototypeProps, constructorProps)
-
 Define and return a sub type of the `Type` object, with a prototype decorated
 with optional `prototypeProps` (a map of additional prototype properties) and optional
 `constructorProps` (a map additional type properties. The sub type itself also inherits
@@ -118,7 +114,6 @@ console.log(beam.isBent)
 ```
 
 ### Type.init(object[, overwrite][, args])
-
 Decorate an object with the prototype of a `Type`, and call its constructor
 on the object with an `args` array, unless `args` is `false`, in which case
 the constructor will be skipped.
@@ -143,7 +138,6 @@ console.emit('hi', 'Sam')
 ```
 
 ### Type.decorate(object[, map][, overwrite])
-
 Decorate an `object` with a `map` of additional properties (or overriding
 properties if `overwrite` is truthy). If the map is not specified, the `Type`
 prototype will decorate the `object` prototype instead.
@@ -182,8 +176,8 @@ console.log(a.sum())
 ```
 
 ### Type.include(type[, overwrite])
-
-The `include` method implements multiple inheritance by decorating one Type's prototype with the prototype properties of another.
+Implement multiple inheritance by decorating one Type's prototype with the
+prototype properties of another.
 
 ```js
 var Type = require('lighter-type')
@@ -231,7 +225,7 @@ console.log(hovercraft.worksOnWater())
 ```
 
 ### Type.is(type)
-Checks whether this Type is descended from another Type.
+Check whether this Type is descended from another Type.
 
 ```js
 var Foo = Type.extend({})
@@ -246,7 +240,7 @@ console.log(Foo.is(Baz))
 ```
 
 ### Type.has(type)
-Checks whether this Type has acquired the functionality of another type
+Check whether this Type has acquired the functionality of another type
 via the extend method or the include method.
 
 ```js
@@ -276,7 +270,6 @@ for (var key in object) {
 ```
 
 ### Type.hide(object, key, value)
-
 Create a property of `object` named `key` with value `value`, and "hide" it by
 making it non-enumerable.
 
@@ -305,7 +298,6 @@ for (var key in object) {
 }
 //> "visible"
 ```
-
 
 ## More on lighter-type...
 * [Contributing](//github.com/lighterio/lighter-type/blob/master/CONTRIBUTING.md)
