@@ -10,19 +10,23 @@ var Type = module.exports = function Type () {}
 /**
  * Extend a Type, yielding a new Type with additional properties from a map.
  *
- * @param  {Object} pros  An optional map of additional prototype properties.
- * @param  {Object} typs  An optional map of additional type properties.
- * @return {Object}      The new Type.
+ * @param  {Function} con   An optional constructor.
+ * @param  {Object}   pros  Optional prototype properties.
+ * @param  {Object}   cons  Optional constructor properties.
+ * @return {Object}         The new Type.
  */
-Type.extend = function extend (pros, typs) {
-  // Construct.
-  var type = (pros || 0).init || function SubType () {
-    type._super.apply(this, arguments)
+Type.extend = function extend (con, pros, cons) {
+  if (typeof con !== 'function') {
+    cons = pros
+    pros = con
+    con = (pros || 0).init || function SubType () {
+      con._super.apply(this, arguments)
+    }
   }
-  var pro = type.prototype
+  var pro = con.prototype
 
   // Copy.
-  this.decorate(type, this, true)
+  this.decorate(con, this, true)
   this.decorate(pro, this.prototype, true)
 
   // Extend.
@@ -33,14 +37,14 @@ Type.extend = function extend (pros, typs) {
       }
     }
   }
-  if (typs) {
-    this.decorate(type, typs, true)
+  if (cons) {
+    this.decorate(con, cons, true)
   }
 
-  // Link.
-  this.hide(type, '_super', this)
+  // Relate.
+  this.hide(con, '_super', this)
 
-  return type
+  return con
 }
 
 /**

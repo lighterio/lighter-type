@@ -5,11 +5,10 @@ var Type = require('../lighter-type')
 var is = global.is || require('exam/lib/is')
 
 describe('Type.extend', function () {
-  it('extends a type', function () {
-    var Dog = Type.extend({
-      init: function (name) {
-        this.name = name
-      },
+  it('extends from a type', function () {
+    var Dog = Type.extend(function Dog (name) {
+      this.name = name
+    }, {
       barkback: function (fn) {
         fn(undefined, this.name + ' says "woof!"')
       }
@@ -55,6 +54,5 @@ describe('Type.extend', function () {
   it('works with empty arguments', function () {
     var SubType = Type.extend()
     is.function(SubType)
-    //is.function(SubType.init)
   })
 })

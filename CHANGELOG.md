@@ -1,5 +1,8 @@
 # lighter-type Change Log
 
+## v2.2.0 - 2016-07-25
+* `minor` Added a `constructor` arg to `extend` (deprecating `init` methods).
+
 ## v2.1.1 - 2015-12-03
 * `patch` Table of contents in README.
 

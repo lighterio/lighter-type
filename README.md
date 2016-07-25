@@ -34,7 +34,7 @@ The `lighter-type` module outputs a constructor with several methods.
 - [Type.hide(object, key, value)](#typehideobject-key-value)
 
 <a name="Type.extend"></a>
-### Type.extend(prototypeProps[, constructorProps])
+### Type.extend([constructor], [prototypeProps], [constructorProps])
 Define and return a sub type of the `Type` object, with a prototype decorated
 with optional `prototypeProps` (a map of additional prototype properties) and optional
 `constructorProps` (a map additional type properties. The sub type itself also inherits
@@ -46,14 +46,11 @@ constructor for the sub type rather than being added as a prototype property.
 ```js
 var Type = require('lighter-type')
 
-// Make a Person type.
-var Person = Type.extend({
-  // Construct a new person with a name.
-  init: function (name) {
-    this.name = name
-  },
-
-  // Give each person a default salutation of "Hello".
+// Construct a new person with a name.
+var Person = Type.extend(function Person (name) {
+  this.name = name
+}, {
+  // Give a person a default salutation of "Hello".
   salutation: 'Hello',
 
   // Greet a person with their defined salutation.
