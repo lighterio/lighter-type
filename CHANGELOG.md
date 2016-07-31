@@ -1,5 +1,8 @@
 # lighter-type Change Log
 
+## v2.2.1 - 2016-07-31
+* `patch` Unbundled dependencies.
+
 ## v2.2.0 - 2016-07-25
 * `minor` Added a `constructor` arg to `extend` (deprecating `init` methods).
 
