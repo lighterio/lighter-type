@@ -3,7 +3,7 @@
 [![Version](https://img.shields.io/npm/v/lighter-type.svg)](//www.npmjs.com/package/lighter-type)
 [![Downloads](https://img.shields.io/npm/dm/lighter-type.svg)](//www.npmjs.com/package/lighter-type)
 [![Build](https://img.shields.io/travis/lighterio/lighter-type.svg)](//travis-ci.org/lighterio/lighter-type)
-[![Coverage](https://img.shields.io/coveralls/lighterio/lighter-type/master.svg)](//coveralls.io/r/lighterio/lighter-type)
+[![Coverage](https://img.shields.io/codecov/c/github/lighterio/lighter-type/master.svg)](//codecov.io/gh/lighterio/lighter-type)
 [![Style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](//www.npmjs.com/package/standard)
 
 The `lighter-type` module is a prototypal inheritance utility with
