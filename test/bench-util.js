@@ -2,11 +2,11 @@
 var fns = exports.fns = {}
 
 load('augment')
-load('fiber')
 load('klass')
 load('modelo')
 load('type')
 load('util')
+load('es6')
 
 function load (key) {
   try {

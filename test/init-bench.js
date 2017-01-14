@@ -6,7 +6,7 @@ var bench = global.bench || function () {}
 bench('Instantiation', function () {
   Object.keys(fns).forEach(function (name) {
     var Product = fns[name].defineProduct()
-    var props = {'name': 'widget'}
+    var props = {name: 'widget'}
     var fn = function () {
       new Product(props).rate(12)
       new Product(props).rate(12)
