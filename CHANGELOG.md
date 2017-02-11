@@ -1,5 +1,8 @@
 # lighter-type Change Log
 
+## v2.2.2 - 2017-02-10
+* `patch` Optimizations.
+
 ## v2.2.1 - 2016-07-31
 * `patch` Unbundled dependencies.
 

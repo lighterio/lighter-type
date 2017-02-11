@@ -3,7 +3,7 @@
 var fns = require('./bench-util').fns
 var bench = global.bench || function () {}
 
-bench('Instantiation', function () {
+bench('Instantiation and Usage', function () {
   Object.keys(fns).forEach(function (name) {
     var Product = fns[name].defineProduct()
     var props = {name: 'widget'}

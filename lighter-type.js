@@ -26,8 +26,8 @@ Type.extend = function extend (con, pros, cons) {
   var pro = con.prototype
 
   // Copy.
-  this.decorate(con, this, true)
-  this.decorate(pro, this.prototype, true)
+  write(con, this)
+  write(pro, this.prototype)
 
   // Extend.
   if (pros) {
@@ -38,7 +38,7 @@ Type.extend = function extend (con, pros, cons) {
     }
   }
   if (cons) {
-    this.decorate(con, cons, true)
+    write(con, cons)
   }
 
   // Relate.
@@ -120,13 +120,13 @@ Type.hide = function hide (object, key, value) {
  * @return {Boolean}       True if this type is an extension of the given type.
  */
 Type.is = function is (type) {
-  var sup = this
-  while (sup) {
-    if (sup === type) {
+  var t = this
+  do {
+    if (t === type) {
       return true
     }
-    sup = sup._super
-  }
+    t = t._super
+  } while (t)
   return false
 }
 
@@ -141,22 +141,24 @@ Type.has = function has (type) {
   if (this === type) {
     return true
   }
-  var sup = this._super
-  if (sup) {
-    if (sup === type) {
-      return true
-    }
-    if (sup.has(type)) {
-      return true
-    }
+  var t = this._super
+  if (t && (t === type || t.has(type))) {
+    return true
   }
-  var includes = this._includes
-  if (includes) {
-    for (var i = 0, l = includes.length; i < l; i++) {
-      if (includes[i].has(type)) {
+  var i = this._includes
+  if (i) {
+    for (var n = 0, l = i.length; n < l; n++) {
+      if (i[n].has(type)) {
         return true
       }
     }
   }
   return false
+}
+
+// Write a property.
+function write (object, map) {
+  for (var key in map) {
+    object[key] = map[key]
+  }
 }

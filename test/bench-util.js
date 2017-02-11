@@ -1,18 +1,19 @@
 'use strict'
 var fns = exports.fns = {}
+var dir = __dirname
 
 load('augment')
 load('klass')
 load('modelo')
-load('type')
+load('lighter-type')
 load('util')
-load('es6')
+load('es6.class')
 
 function load (key) {
   try {
-    var fn = require(__dirname + '/alternatives/' + key)
+    var fn = require(dir + '/alternatives/' + key)
     fns[key] = fn
-  } catch (ignore) {
-    console.log(ignore)
+  } catch (error) {
+    console.log(error)
   }
 }
